@@ -227,23 +227,5 @@ where cd.continent is not null
 )
 
 
---Getting Top 3 countries in every continent with highest percent vaccination.
-  --(used JOINS, Used aggregate functions, Sub Query, Windows function, Assigned Rows and limited to top N countries from each continent)
-	--(we can also get the bottom N countries by removing 'DESC' from the ROW_NUMBER ORDER BY clause)
 
-
-select * from
-(select 
-ROW_NUMBER() OVER (PARTITION BY continent ORDER BY percent_vaccinated DESC ) AS Sr_No,
-*
-from(
-select 
-continent, 
-location,
-max(rolling_total_vaccination) as max_total_vaccination,
-round(max(rolling_total_vaccination/population*100),2) as percent_vaccinated
-from popvacc
-where date between '2020-05-01' and '2021-12-31'
-group by continent, location) t1) t2
-where Sr_No <= 3
 
